@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/viz-app/static/css/main.073c9b0a.css",
-    "main.js": "/viz-app/static/js/main.2af35279.js",
+    "main.js": "/viz-app/static/js/main.3d863588.js",
     "static/js/787.0458c539.chunk.js": "/viz-app/static/js/787.0458c539.chunk.js",
     "static/media/logo.svg": "/viz-app/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/viz-app/index.html",
     "main.073c9b0a.css.map": "/viz-app/static/css/main.073c9b0a.css.map",
-    "main.2af35279.js.map": "/viz-app/static/js/main.2af35279.js.map",
+    "main.3d863588.js.map": "/viz-app/static/js/main.3d863588.js.map",
     "787.0458c539.chunk.js.map": "/viz-app/static/js/787.0458c539.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.073c9b0a.css",
-    "static/js/main.2af35279.js"
+    "static/js/main.3d863588.js"
   ]
 }
