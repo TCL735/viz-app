@@ -1,16 +1,27 @@
 {
   "files": {
-    "main.css": "/viz-app/static/css/main.073c9b0a.css",
-    "main.js": "/viz-app/static/js/main.3d863588.js",
+    "main.css": "/viz-app/static/css/main.1c6d01ed.css",
+    "main.js": "/viz-app/static/js/main.7ddcc822.js",
     "static/js/787.0458c539.chunk.js": "/viz-app/static/js/787.0458c539.chunk.js",
-    "static/media/logo.svg": "/viz-app/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "static/media/ProximaNova-Bold.woff2": "/viz-app/static/media/ProximaNova-Bold.e91c6db5b35683295544.woff2",
+    "static/media/ProximaNova-Regular.woff2": "/viz-app/static/media/ProximaNova-Regular.ce94a32357827905b305.woff2",
+    "static/media/ProximaNova-Medium.woff2": "/viz-app/static/media/ProximaNova-Medium.2fb7ea267c881ef8096d.woff2",
+    "static/media/icomoon.svg": "/viz-app/static/media/icomoon.e55f5a8d583cfcaff9a2.svg",
+    "static/media/ProximaNova-Black.woff2": "/viz-app/static/media/ProximaNova-Black.a48bb7a576e2ed1ffbcf.woff2",
+    "static/media/ProximaNova-Light.woff2": "/viz-app/static/media/ProximaNova-Light.21c2cd2dbbcacf2430ae.woff2",
+    "static/media/RobotoMono-Medium.woff2": "/viz-app/static/media/RobotoMono-Medium.ed9e9398e3c6b882dba0.woff2",
+    "static/media/RobotoMono-SemiBold.woff2": "/viz-app/static/media/RobotoMono-SemiBold.f5a23ff92594b99432b6.woff2",
+    "static/media/icomoon.eot": "/viz-app/static/media/icomoon.6377fe3995144736b02d.eot",
+    "static/media/icomoon.woff": "/viz-app/static/media/icomoon.0b1e045ef19e98a6f7a2.woff",
+    "static/media/icomoon.ttf": "/viz-app/static/media/icomoon.97ab63262412c5c43a03.ttf",
+    "static/media/icomoon.woff2": "/viz-app/static/media/icomoon.c3f97ef14e62b961b09f.woff2",
     "index.html": "/viz-app/index.html",
-    "main.073c9b0a.css.map": "/viz-app/static/css/main.073c9b0a.css.map",
-    "main.3d863588.js.map": "/viz-app/static/js/main.3d863588.js.map",
+    "main.1c6d01ed.css.map": "/viz-app/static/css/main.1c6d01ed.css.map",
+    "main.7ddcc822.js.map": "/viz-app/static/js/main.7ddcc822.js.map",
     "787.0458c539.chunk.js.map": "/viz-app/static/js/787.0458c539.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.073c9b0a.css",
-    "static/js/main.3d863588.js"
+    "static/css/main.1c6d01ed.css",
+    "static/js/main.7ddcc822.js"
   ]
 }
