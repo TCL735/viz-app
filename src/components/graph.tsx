@@ -1,12 +1,19 @@
 import React, {FC} from 'react'
 import {
   NINETEEN_EIGHTY_FOUR,
+  Config,
   LayerConfig,
   Plot,
+  Table,
+  fromFlux,
   timeFormatter,
 } from '@influxdata/giraffe'
 import {PlotContainer} from './PlotContainer'
 import {getRandomTable} from '../utils/randomTable'
+
+interface VisualizationProps {
+  fluxResponse?: string
+}
 
 const maxValue = Math.random() * Math.floor(200)
 const includeNegativeNumbers = false
@@ -14,14 +21,14 @@ const lines = 4
 const fillColumnsCount = 5
 const fillColumnNameLength = 4
 const timeZone = 'America/Los_Angeles'
-const timeFormat = 'YYYY-MM-DD HH:mm:ss ZZ'
-const valueAxisLabel = 'foo'
-const yDomainMin = 0
-const yDomainMax = maxValue
+const timeFormat = 'YYYY-MM-DD HH:mm:ss'
+const valueAxisLabel = ''
 const includeYDomainZoom = false
 const xScale = 'linear'
 const yScale = 'linear'
 const tickFont = '10px sans-serif'
+const xTotalTicks = 10
+const yTotalTicks = 10
 const legendFont = '12px sans-serif'
 const legendOpacity = 1.0
 const legendOrientationThreshold = 5
@@ -35,18 +42,26 @@ const hoverDimension = 'auto'
 const shadeBelow = false
 const shadeBelowOpacity = 0.1
 
-export const Graph: FC = () => {
-  const table = getRandomTable(
-    maxValue,
-    includeNegativeNumbers,
-    lines * 20,
-    20,
-    fillColumnsCount,
-    fillColumnNameLength
-  )
+export const Visualization: FC<VisualizationProps> = (
+  props: VisualizationProps
+) => {
+  const {fluxResponse} = props
+  let table: Table
 
-  const config = {
-    table,
+  if (!fluxResponse) {
+    table = getRandomTable(
+      maxValue,
+      includeNegativeNumbers,
+      lines * 20,
+      20,
+      fillColumnsCount,
+      fillColumnNameLength
+    )
+  } else {
+    table = fromFlux(fluxResponse).table
+  }
+
+  const config: Config = {
     valueFormatters: {
       _time: timeFormatter({timeZone, format: timeFormat}),
       _value: (val: number) =>
@@ -54,13 +69,14 @@ export const Graph: FC = () => {
           valueAxisLabel ? ` ${valueAxisLabel}` : valueAxisLabel
         }`,
     },
-    yDomain: [yDomainMin, yDomainMax],
     includeYDomainZoom,
     onSetYDomain: () => {},
     onResetYDomain: () => {},
     xScale,
     yScale,
     tickFont,
+    xTotalTicks,
+    yTotalTicks,
     legendFont,
     legendOpacity,
     legendOrientationThreshold,
@@ -84,6 +100,13 @@ export const Graph: FC = () => {
       } as LayerConfig,
     ],
   }
+
+  if (!fluxResponse) {
+    config.table = table
+  } else {
+    config.fluxResponse = fluxResponse
+  }
+
   return (
     <PlotContainer>
       <Plot config={config}></Plot>

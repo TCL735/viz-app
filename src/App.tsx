@@ -1,12 +1,21 @@
 import React from 'react'
-import {Graph} from './components/graph'
+import {AppWrapper, Page} from '@influxdata/clockface'
+import {Visualization} from './components/graph'
+
+import {dailyClimate} from './data/dailyClimate'
+import {convertCSVToFluxAnnotatedCSV} from './data/convertCSVToFluxAnnotatedCSV'
 import './style/App.css'
 
 function App() {
+  const fluxResponse = convertCSVToFluxAnnotatedCSV(dailyClimate)
   return (
-    <div className="App">
-      <Graph />
-    </div>
+    <AppWrapper>
+      <Page>
+        <div className="App">
+          <Visualization fluxResponse={fluxResponse} />
+        </div>
+      </Page>
+    </AppWrapper>
   )
 }
 

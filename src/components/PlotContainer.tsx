@@ -11,8 +11,6 @@ export const PlotContainer: FC<PlotContainerProps> = (props) => {
   const defaultPlotStyle = {
     width: 'calc(100vw - 100px)',
     height: 'calc(100vh - 125px)',
-    // width: 1000,
-    // height: 500,
     margin: '50px',
   }
 
