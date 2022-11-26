@@ -1,23 +1,21 @@
 import React from 'react'
-import logo from './logo.svg'
-import './App.css'
+import {AppWrapper, Page} from '@influxdata/clockface'
+import {Visualization} from './components/graph'
+
+import {dailyClimate} from './data/dailyClimate'
+import {convertCSVToFluxAnnotatedCSV} from './data/convertCSVToFluxAnnotatedCSV'
+import './style/App.css'
 
 function App() {
+  const fluxResponse = convertCSVToFluxAnnotatedCSV(dailyClimate)
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>This is a TypeScript viz app.</p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppWrapper>
+      <Page>
+        <div className="App">
+          <Visualization fluxResponse={fluxResponse} />
+        </div>
+      </Page>
+    </AppWrapper>
   )
 }
 
