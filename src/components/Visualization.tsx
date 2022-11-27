@@ -8,7 +8,6 @@ import {
   fromFlux,
   timeFormatter,
 } from '@influxdata/giraffe'
-import {PlotContainer} from './PlotContainer'
 import {getRandomTable} from '../utils/randomTable'
 
 interface VisualizationProps {
@@ -107,9 +106,5 @@ export const Visualization: FC<VisualizationProps> = (
     config.fluxResponse = fluxResponse
   }
 
-  return (
-    <PlotContainer>
-      <Plot config={config}></Plot>
-    </PlotContainer>
-  )
+  return <Plot config={config}></Plot>
 }

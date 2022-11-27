@@ -1,0 +1,92 @@
+.react-grid-layout {
+  position: relative;
+  transition: height 200ms ease;
+}
+.react-grid-item {
+  z-index: 1;
+  transition: all 200ms ease;
+  transition-property: left, top;
+}
+.react-grid-item.cssTransforms {
+  transition-property: transform;
+}
+.react-grid-item.resizing {
+  z-index: 3;
+  will-change: width, height;
+}
+
+.react-grid-item.react-draggable-dragging {
+  transition: none;
+  z-index: 3;
+  will-change: top, left;
+}
+
+.react-grid-item.react-grid-placeholder {
+  border: 0 !important;
+  opacity: 0.3;
+  border-radius: 4px !important;
+  transition-duration: 100ms;
+  z-index: 1;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+.react-resizable-handle {
+  position: absolute;
+  background-image: none;
+  cursor: nwse-resize;
+  border: 15px solid transparent;
+  border-right-color: #333346;
+  border-bottom-color: #333346;
+  border-bottom-right-radius: 4px;
+  z-index: 5;
+  transition: border-color 0.25s ease, opacity 0.25s ease;
+  width: 30px;
+  height: 30px;
+  bottom: 0;
+  right: 0;
+  /* opacity: 0; */
+}
+
+.react-resizable-handle::before {
+  content: '';
+  display: block;
+  position: absolute;
+  height: 2px;
+  border-radius: 1px;
+  background-color: #07070e;
+  transition: background-color 0.25s ease;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  border: 0;
+  width: 12px;
+  top: 7px;
+  left: 7px;
+}
+.react-resizable-handle::after {
+  content: '';
+  display: block;
+  position: absolute;
+  height: 2px;
+  border-radius: 1px;
+  background-color: #07070e;
+  transition: background-color 0.25s ease;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  border: 0;
+  width: 20px;
+  top: 4px;
+  left: 4px;
+}
+
+.react-resizable-handle:hover {
+  border-right-color: #ce58eb;
+  border-bottom-color: #ce58eb;
+}
+
+.react-grid-item.resizing .react-resizable-handle,
+.react-grid-item.react-draggable-dragging .react-resizable-handle {
+  border-right-color: #ce58eb;
+  border-bottom-color: #ce58eb;
+}

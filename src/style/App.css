@@ -1,3 +1,6 @@
+@import './cell.css';
+@import './react-grid-layout.css';
+
 .App {
   display: block;
 }
