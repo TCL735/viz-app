@@ -1,3 +1,4 @@
+@import '@influxdata/clockface/dist/index.css';
 @import './cell.css';
 @import './react-grid-layout.css';
 
