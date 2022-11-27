@@ -1,14 +1,16 @@
 import React, {FC} from 'react'
 import ReactGridLayout, {WidthProvider, Layout} from 'react-grid-layout'
 import {Page} from '@influxdata/clockface'
-import {Cell} from './Cell'
+import {Cell} from './cells/Cell'
 import {Visualization} from './Visualization'
 
 import {dailyClimate} from '../data/dailyClimate'
 import {convertCSVToFluxAnnotatedCSV} from '../data/convertCSVToFluxAnnotatedCSV'
+
 const DASHBOARD_LAYOUT_ROW_HEIGHT = 40
 const LAYOUT_MARGIN = 4
 const Grid = WidthProvider(ReactGridLayout)
+
 export const Dashboard: FC = () => {
   const fluxResponse = convertCSVToFluxAnnotatedCSV(dailyClimate)
 
