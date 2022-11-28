@@ -18,7 +18,7 @@ import {addCell, deleteCell} from './actions'
 import {VisualizationTypes, DateRangeOptions} from '../../types'
 
 const OVERLAY_MAX_WIDTH = 600
-const initialVisualizationType = 'Select the visualization'
+const initialVisualizationType = 'Select the visualization (* required)'
 const initialDateRange = 'Select the date range'
 
 type ReduxProps = ConnectedProps<typeof connector>
@@ -65,7 +65,7 @@ const CreateCellOverlayComponent: FC<CreateCellOverlayProps & ReduxProps> = (
       x: 0,
       y: 0,
       w: 8,
-      h: 8,
+      h: 10,
     })
     closeAddCellOverlay()
     setSelectedDateRange(initialDateRange)
@@ -149,7 +149,7 @@ const CreateCellOverlayComponent: FC<CreateCellOverlayProps & ReduxProps> = (
                     active={active}
                     onClick={onClick}
                     icon={IconFont.Calendar}
-                    color={ComponentColor.Primary}
+                    color={ComponentColor.Secondary}
                     style={{
                       textTransform: 'uppercase',
                       letterSpacing: '0.07em',

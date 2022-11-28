@@ -94,8 +94,8 @@ export const Visualization: FC<VisualizationProps> = (
     ],
   }
 
-  if (type === VisualizationTypes.SimpleTable) {
-    return <Plot config={tableConfig}></Plot>
-  }
-  return <Plot config={graphConfig}></Plot>
+  const config =
+    type === VisualizationTypes.SimpleTable ? tableConfig : graphConfig
+
+  return <Plot config={config}></Plot>
 }
