@@ -2,25 +2,21 @@ import React, {FC} from 'react'
 import {
   NINETEEN_EIGHTY_FOUR,
   Config,
+  FromFluxResult,
   LayerConfig,
   Plot,
-  Table,
-  fromFlux,
   timeFormatter,
+  SimpleTableLayerConfig,
 } from '@influxdata/giraffe'
-import {getRandomTable} from '../utils/randomTable'
 
+import {VisualizationTypes} from '../types'
 interface VisualizationProps {
-  fluxResponse?: string
+  fromFluxResult: FromFluxResult
+  type: string
 }
 
-const maxValue = Math.random() * Math.floor(200)
-const includeNegativeNumbers = false
-const lines = 4
-const fillColumnsCount = 5
-const fillColumnNameLength = 4
 const timeZone = 'America/Los_Angeles'
-const timeFormat = 'YYYY-MM-DD HH:mm:ss'
+const timeFormat = 'YYYY-MM-DD HH:mm'
 const valueAxisLabel = ''
 const includeYDomainZoom = false
 const xScale = 'linear'
@@ -44,23 +40,11 @@ const shadeBelowOpacity = 0.1
 export const Visualization: FC<VisualizationProps> = (
   props: VisualizationProps
 ) => {
-  const {fluxResponse} = props
-  let table: Table
+  const {fromFluxResult, type} = props
+  const table = fromFluxResult.table
 
-  if (!fluxResponse) {
-    table = getRandomTable(
-      maxValue,
-      includeNegativeNumbers,
-      lines * 20,
-      20,
-      fillColumnsCount,
-      fillColumnNameLength
-    )
-  } else {
-    table = fromFlux(fluxResponse).table
-  }
-
-  const config: Config = {
+  const graphConfig: Config = {
+    table,
     valueFormatters: {
       _time: timeFormatter({timeZone, format: timeFormat}),
       _value: (val: number) =>
@@ -83,7 +67,7 @@ export const Visualization: FC<VisualizationProps> = (
     showAxes,
     layers: [
       {
-        type: 'line',
+        type,
         x: '_time',
         y: '_value',
         fill: table.columnKeys.filter(
@@ -100,11 +84,18 @@ export const Visualization: FC<VisualizationProps> = (
     ],
   }
 
-  if (!fluxResponse) {
-    config.table = table
-  } else {
-    config.fluxResponse = fluxResponse
+  const tableConfig: Config = {
+    fromFluxResult,
+    layers: [
+      {
+        type,
+        showAll: true,
+      } as SimpleTableLayerConfig,
+    ],
   }
 
-  return <Plot config={config}></Plot>
+  if (type === VisualizationTypes.SimpleTable) {
+    return <Plot config={tableConfig}></Plot>
+  }
+  return <Plot config={graphConfig}></Plot>
 }

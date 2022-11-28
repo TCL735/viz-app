@@ -3,3 +3,24 @@
   padding: 15px;
   background-color: rgba(26, 26, 42, 0.5);
 }
+
+.cell-name {
+  flex: 1 0 0;
+  font-size: 12px;
+  line-height: 12px;
+  font-weight: 600;
+  padding-right: 8px;
+  pointer-events: none;
+}
+
+.create-cell-name,
+.create-cell-visualization-type,
+.create-cell-date-range {
+  display: flex;
+  align-items: flex-end;
+}
+
+.create-cell-visualization-type,
+.create-cell-date-range {
+  margin-bottom: 16px;
+}
