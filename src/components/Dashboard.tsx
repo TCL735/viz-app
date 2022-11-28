@@ -1,33 +1,50 @@
+// Libraries
 import React, {FC} from 'react'
+import {connect, ConnectedProps} from 'react-redux'
 import ReactGridLayout, {WidthProvider, Layout} from 'react-grid-layout'
-import {Page} from '@influxdata/clockface'
-import {Cell} from './cells/Cell'
-import {Visualization} from './Visualization'
 
-import {dailyClimate} from '../data/dailyClimate'
-import {convertCSVToFluxAnnotatedCSV} from '../data/convertCSVToFluxAnnotatedCSV'
+// Components
+import {Page} from '@influxdata/clockface'
+import {AddVisualizationButton} from './AddVisualizationButton'
+import {Cell} from './cells/Cell'
+
+// Types
+import {RootState} from '../redux/store'
+
+// Selectors
+import {getAllCells} from './cells/selectors'
 
 const DASHBOARD_LAYOUT_ROW_HEIGHT = 40
 const LAYOUT_MARGIN = 4
 const Grid = WidthProvider(ReactGridLayout)
 
-export const Dashboard: FC = () => {
-  const fluxResponse = convertCSVToFluxAnnotatedCSV(dailyClimate)
+type ReduxProps = ConnectedProps<typeof connector>
 
-  const layout: Layout[] = [
-    {i: 'a', x: 0, y: 0, w: 3, h: 4},
-    {i: 'b', x: 0, y: 0, w: 3, h: 4},
-    {i: 'c', x: 0, y: 0, w: 3, h: 4},
-  ]
+export const DashboardComponent: FC<ReduxProps> = (props) => {
+  const {cells} = props
 
-  const handleLayoutChange = (grid: any) => {
+  const layout: Layout[] = cells.map((cell) => ({
+    i: cell.id,
+    x: cell.x,
+    y: cell.y,
+    w: cell.w,
+    h: cell.h,
+  }))
+
+  const handleLayoutChange = (grid: Layout[]) => {
     console.log('~~~ layoutChanged: received grid:', grid)
   }
+
   return (
     <Page>
       <Page.Header fullWidth={true}>
-        <Page.Title title="Climate Visualization" />
+        <Page.Title title="Climate Visualizations" />
       </Page.Header>
+      <Page.ControlBar fullWidth={true}>
+        <Page.ControlBarLeft>
+          <AddVisualizationButton />
+        </Page.ControlBarLeft>
+      </Page.ControlBar>
       <Page.Contents fullWidth={true} scrollable={true} className="dashboard">
         <Grid
           className="layout"
@@ -38,19 +55,27 @@ export const Dashboard: FC = () => {
           rowHeight={DASHBOARD_LAYOUT_ROW_HEIGHT}
           resizeHandles={['se']}
         >
-          <div key="a">
-            <Cell>
-              <Visualization fluxResponse={fluxResponse} />
-            </Cell>
-          </div>
-          <div key="b">
-            <Cell>hello there</Cell>
-          </div>
-          <div key="c">
-            <Cell>and what do we have here?</Cell>
-          </div>
+          {cells.map((cell) => (
+            <div key={cell.id}>
+              <Cell
+                name={cell.name}
+                type={cell.type}
+                dateRange={cell.dateRange}
+              ></Cell>
+            </div>
+          ))}
         </Grid>
       </Page.Contents>
     </Page>
   )
 }
+
+const mstp = (state: RootState) => {
+  return {
+    cells: getAllCells(state),
+  }
+}
+
+const connector = connect(mstp)
+
+export const Dashboard = connector(DashboardComponent)
