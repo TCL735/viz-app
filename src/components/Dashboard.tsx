@@ -14,6 +14,9 @@ import {RootState} from '../redux/store'
 // Selectors
 import {getAllCells} from './cells/selectors'
 
+// Actions
+import {setCellPosition} from './cells/actions'
+
 const DASHBOARD_LAYOUT_ROW_HEIGHT = 40
 const LAYOUT_MARGIN = 4
 const Grid = WidthProvider(ReactGridLayout)
@@ -21,7 +24,7 @@ const Grid = WidthProvider(ReactGridLayout)
 type ReduxProps = ConnectedProps<typeof connector>
 
 export const DashboardComponent: FC<ReduxProps> = (props) => {
-  const {cells} = props
+  const {cells, setCellPosition} = props
 
   const layout: Layout[] = cells.map((cell) => ({
     i: cell.id,
@@ -32,7 +35,25 @@ export const DashboardComponent: FC<ReduxProps> = (props) => {
   }))
 
   const handleLayoutChange = (grid: Layout[]) => {
-    console.log('~~~ layoutChanged: received grid:', grid)
+    cells.forEach((cell) => {
+      const cellLayout = grid.find((layoutCell) => layoutCell.i === cell.id)
+
+      if (
+        cellLayout &&
+        (cellLayout.x !== cell.x ||
+          cellLayout.y !== cell.y ||
+          cellLayout.w !== cell.w ||
+          cellLayout.h !== cell.h)
+      ) {
+        setCellPosition({
+          ...cell,
+          x: cellLayout.x,
+          y: cellLayout.y,
+          w: cellLayout.w,
+          h: cellLayout.h,
+        })
+      }
+    })
   }
 
   return (
@@ -58,6 +79,7 @@ export const DashboardComponent: FC<ReduxProps> = (props) => {
           {cells.map((cell) => (
             <div key={cell.id}>
               <Cell
+                id={cell.id}
                 name={cell.name}
                 type={cell.type}
                 dateRange={cell.dateRange}
@@ -76,6 +98,10 @@ const mstp = (state: RootState) => {
   }
 }
 
-const connector = connect(mstp)
+const mdtp = {
+  setCellPosition,
+}
+
+const connector = connect(mstp, mdtp)
 
 export const Dashboard = connector(DashboardComponent)

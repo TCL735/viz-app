@@ -13,7 +13,7 @@ const resultLabelForDailyClimate: AnnotatedTable = {
   'mean pressure': 'centibars',
 }
 
-export const convertCSVToFluxAnnotatedCSV = (csv: string): string => {
+export const mapCSVtoFluxForGraphs = (csv: string): string => {
   const annotatedCSVHeader = `#group,false,false,true,true,false,false,true
 #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string`
 
@@ -50,6 +50,39 @@ export const convertCSVToFluxAnnotatedCSV = (csv: string): string => {
   return Object.values(annotatedCSVTables).join('\n\n')
 }
 
+export const mapCSVtoFluxForTables = (csv: string): string => {
+  let fluxResponse = `#group,false,false,true,true,false,false,false,false,false,false
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,,double,double,double,double,double
+#default,_result,,,,,,,,,
+,result,table,_start,_stop,_time,mean temp,humidity,wind speed,mean pressure
+`
+  const entries = csv.split('\n')
+
+  entries.forEach((entry, index) => {
+    if (index === 0 || entry.length === 0) {
+      return
+    }
+    fluxResponse =
+      fluxResponse.concat(`,,0,${startTime},${endTime},${entry.slice(
+        0,
+        10
+      )}${currentHour},${entry.slice(11)}
+`)
+  })
+  return fluxResponse
+}
+
+/*
+  Converts pressure from millibars to centibars
+    This was needed for the original data which was in millibars.
+    Our line and scatter graphs use the same scale for values all types
+    of measurements, and pressure was the only measurement at or around
+    1,000 units. Everything else was roughly at or less 100 units,
+    making the graph look stretched.
+
+    By converting units, we unstretch the graph by scaling down the pressure
+    measurement closer to the other measurements on the line and scatter graphs
+*/
 export const updateMeanPressure = (csv: string): string => {
   const rows = csv.split('\n')
   rows.forEach((row, index) => {
