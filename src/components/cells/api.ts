@@ -6,8 +6,8 @@ import {dailyClimate} from '../../data/dailyClimate'
 
 import {DateRangeOptions} from '../../types'
 
-const MIN_WAIT = 100
-const MAX_WAIT = 1200
+const MIN_WAIT = 200
+const MAX_WAIT = 1500
 
 const getRandomWaitTime = (min: number, max: number) => {
   return Math.random() * (max - min) + min

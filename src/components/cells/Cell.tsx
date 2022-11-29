@@ -6,6 +6,8 @@ import {
   ComponentSize,
   ConfirmationButton,
   IconFont,
+  RemoteDataState,
+  TechnoSpinner,
 } from '@influxdata/clockface'
 import {fromFlux, FromFluxResult, newTable} from '@influxdata/giraffe'
 
@@ -16,7 +18,7 @@ import {fetchClimateData} from './api'
 import {
   mapCSVtoFluxForGraphs,
   mapCSVtoFluxForTables,
-} from '../../data/mapCSVtoFlux'
+} from '../../utils/mapCSVtoFlux'
 
 import {deleteCell} from './actions'
 import {VisualizationTypes} from '../../types'
@@ -46,8 +48,12 @@ const CellComponent: FC<CellProps & ReduxProps> = (props) => {
   const [fromFluxResult, setFromFluxResult] = useState<FromFluxResult>(
     initialFromFluxResult
   )
+  const [apiStatus, setApiStatus] = useState<RemoteDataState>(
+    RemoteDataState.NotStarted
+  )
 
   useEffect(() => {
+    setApiStatus(RemoteDataState.Loading)
     fetchClimateData(selectedDateRange).then((climateData) => {
       const fluxResponse =
         type === VisualizationTypes.SimpleTable
@@ -55,6 +61,7 @@ const CellComponent: FC<CellProps & ReduxProps> = (props) => {
           : mapCSVtoFluxForGraphs(climateData)
 
       setFromFluxResult(fromFlux(fluxResponse))
+      setApiStatus(RemoteDataState.Done)
     })
   }, [selectedDateRange]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -72,9 +79,20 @@ const CellComponent: FC<CellProps & ReduxProps> = (props) => {
     fromFluxResult.table.length > 0 ? (
       <div className="cell-body">
         <Visualization type={type} fromFluxResult={fromFluxResult} />
+        {apiStatus === RemoteDataState.Loading ? (
+          <TechnoSpinner
+            className="loading-spinner"
+            strokeWidth={ComponentSize.Large}
+          />
+        ) : null}
       </div>
     ) : (
-      <div className="cell-body">Fetching...</div>
+      <div className="cell-body">
+        <TechnoSpinner
+          className="loading-spinner"
+          strokeWidth={ComponentSize.Large}
+        />
+      </div>
     )
 
   return (

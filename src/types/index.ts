@@ -16,6 +16,7 @@ export enum VisualizationTypes {
 }
 
 export enum DateRangeOptions {
+  All = 'All Dates',
   Thirteen = '2013',
   Fourteen = '2014',
   Fifteen = '2015',

@@ -29,38 +29,18 @@ export const DateRangeSelector: FC<Props> = (props) => {
       )}
       menu={(onCollapse) => (
         <Dropdown.Menu onCollapse={onCollapse}>
-          <Dropdown.Item
-            id={DateRangeOptions.Thirteen}
-            key={DateRangeOptions.Thirteen}
-            value={DateRangeOptions.Thirteen}
-            onClick={handleSelectDateRange}
-          >
-            {DateRangeOptions.Thirteen}
-          </Dropdown.Item>
-          <Dropdown.Item
-            id={DateRangeOptions.Fourteen}
-            key={DateRangeOptions.Fourteen}
-            value={DateRangeOptions.Fourteen}
-            onClick={handleSelectDateRange}
-          >
-            {DateRangeOptions.Fourteen}
-          </Dropdown.Item>
-          <Dropdown.Item
-            id={DateRangeOptions.Fifteen}
-            key={DateRangeOptions.Fifteen}
-            value={DateRangeOptions.Fifteen}
-            onClick={handleSelectDateRange}
-          >
-            {DateRangeOptions.Fifteen}
-          </Dropdown.Item>
-          <Dropdown.Item
-            id={DateRangeOptions.Sixteen}
-            key={DateRangeOptions.Sixteen}
-            value={DateRangeOptions.Sixteen}
-            onClick={handleSelectDateRange}
-          >
-            {DateRangeOptions.Sixteen}
-          </Dropdown.Item>
+          {Object.values(DateRangeOptions)
+            .sort()
+            .map((dateOption) => (
+              <Dropdown.Item
+                id={dateOption}
+                key={dateOption}
+                value={dateOption}
+                onClick={handleSelectDateRange}
+              >
+                {dateOption}
+              </Dropdown.Item>
+            ))}
         </Dropdown.Menu>
       )}
     />
