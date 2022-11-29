@@ -10,6 +10,8 @@ import {
 } from '@influxdata/giraffe'
 
 import {VisualizationTypes} from '../types'
+import {extent} from '../utils/useVisDomain'
+
 interface VisualizationProps {
   fromFluxResult: FromFluxResult
   type: string
@@ -18,7 +20,6 @@ interface VisualizationProps {
 const timeZone = 'America/Los_Angeles'
 const timeFormat = 'YYYY-MM-DD HH:mm'
 const valueAxisLabel = ''
-const includeYDomainZoom = false
 const xScale = 'linear'
 const yScale = 'linear'
 const tickFont = '10px sans-serif'
@@ -37,12 +38,35 @@ const hoverDimension = 'auto'
 const shadeBelow = false
 const shadeBelowOpacity = 0.1
 
+const includeXDomainZoom = true
+const onSetXDomain = (domain: number[]) => {
+  console.log('onSetXDomain: domain', domain)
+}
+
+const onResetXDomain = () => {
+  console.log('onResetXDomain')
+}
+
+const includeYDomainZoom = true
+const onSetYDomain = (domain: number[]) => {
+  console.log('onSetYDomain: domain', domain)
+}
+
+const onResetYDomain = () => {
+  console.log('onResetYDomain')
+}
+
 export const Visualization: FC<VisualizationProps> = (
   props: VisualizationProps
 ) => {
   const {fromFluxResult, type} = props
   const table = fromFluxResult.table
 
+  // console.log('table:', table)
+  // console.log(
+  //   'extent of time column',
+  //   extent(table.getColumn('_time') as number[])
+  // )
   const graphConfig: Config = {
     table,
     valueFormatters: {
@@ -52,14 +76,19 @@ export const Visualization: FC<VisualizationProps> = (
           valueAxisLabel ? ` ${valueAxisLabel}` : valueAxisLabel
         }`,
     },
-    includeYDomainZoom,
-    onSetYDomain: () => {},
-    onResetYDomain: () => {},
     xScale,
     yScale,
     tickFont,
     xTotalTicks,
     yTotalTicks,
+    xDomain: extent(table.getColumn('_time') as number[]) as number[],
+    includeXDomainZoom,
+    onSetXDomain,
+    onResetXDomain,
+    yDomain: extent(table.getColumn('_value') as number[]) as number[],
+    includeYDomainZoom,
+    onSetYDomain,
+    onResetYDomain,
     legendFont,
     legendOpacity,
     legendOrientationThreshold,

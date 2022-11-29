@@ -52,7 +52,7 @@ export const mapCSVtoFluxForGraphs = (csv: string): string => {
 
 export const mapCSVtoFluxForTables = (csv: string): string => {
   let fluxResponse = `#group,false,false,true,true,false,false,false,false,false,false
-#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,,double,double,double,double,double
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,double,double,double,double
 #default,_result,,,,,,,,,
 ,result,table,_start,_stop,_time,mean temp,humidity,wind speed,mean pressure
 `
