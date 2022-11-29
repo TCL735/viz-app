@@ -25,6 +25,15 @@
   margin-bottom: 8px;
 }
 
+.cell-dropdown-date-range {
+  width: 175px !important;
+  margin-right: 12px;
+}
+
+.cell-dropdown-date-range > button {
+  height: 24px;
+}
+
 .cell-body {
   flex: 1 0 0;
   position: relative;

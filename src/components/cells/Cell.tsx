@@ -10,6 +10,7 @@ import {
 import {fromFlux, FromFluxResult, newTable} from '@influxdata/giraffe'
 
 import {Visualization} from '../Visualization'
+import {DateRangeSelector} from '../DateRangeSelector'
 
 import {fetchClimateData} from './api'
 import {
@@ -19,6 +20,7 @@ import {
 
 import {deleteCell} from './actions'
 import {VisualizationTypes} from '../../types'
+import {INITIAL_DATE_RANGE} from '../../constants.ts'
 
 const initialFromFluxResult: FromFluxResult = {
   table: newTable(0),
@@ -37,13 +39,16 @@ interface CellProps {
 }
 
 const CellComponent: FC<CellProps & ReduxProps> = (props) => {
-  const {deleteCell, id, type} = props
+  const {deleteCell, id, dateRange, type} = props
+  const [selectedDateRange, setSelectedDateRange] = useState<string>(
+    dateRange === INITIAL_DATE_RANGE ? 'All Dates' : dateRange
+  )
   const [fromFluxResult, setFromFluxResult] = useState<FromFluxResult>(
     initialFromFluxResult
   )
 
   useEffect(() => {
-    fetchClimateData(props.dateRange).then((climateData) => {
+    fetchClimateData(selectedDateRange).then((climateData) => {
       const fluxResponse =
         type === VisualizationTypes.SimpleTable
           ? mapCSVtoFluxForTables(climateData)
@@ -51,7 +56,7 @@ const CellComponent: FC<CellProps & ReduxProps> = (props) => {
 
       setFromFluxResult(fromFlux(fluxResponse))
     })
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [selectedDateRange]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const {name} = props
 
@@ -59,14 +64,28 @@ const CellComponent: FC<CellProps & ReduxProps> = (props) => {
     deleteCell(id)
   }
 
-  if (!fromFluxResult.table.length) {
-    return null
+  const handleSelectDateRange = (selection: string) => {
+    setSelectedDateRange(selection)
   }
+
+  const cellBody =
+    fromFluxResult.table.length > 0 ? (
+      <div className="cell-body">
+        <Visualization type={type} fromFluxResult={fromFluxResult} />
+      </div>
+    ) : (
+      <div className="cell-body">Fetching...</div>
+    )
 
   return (
     <div className="cell">
       <div className="cell-header">
         <div className="cell-name">{name}</div>
+        <DateRangeSelector
+          className="cell-dropdown-date-range"
+          selectedDateRange={selectedDateRange}
+          handleSelectDateRange={handleSelectDateRange}
+        />
         <ConfirmationButton
           color={ComponentColor.Secondary}
           icon={IconFont.Trash_New}
@@ -77,9 +96,8 @@ const CellComponent: FC<CellProps & ReduxProps> = (props) => {
           confirmationButtonText="Confirm"
         />
       </div>
-      <div className="cell-body">
-        <Visualization type={type} fromFluxResult={fromFluxResult} />
-      </div>
+      {cellBody}
+      <div className="cell-footer"></div>
     </div>
   )
 }
