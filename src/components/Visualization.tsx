@@ -89,7 +89,7 @@ export const Visualization: FC<VisualizationProps> = (
     layers: [
       {
         type,
-        showAll: true,
+        showAll: false,
       } as SimpleTableLayerConfig,
     ],
   }

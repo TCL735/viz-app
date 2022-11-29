@@ -12,9 +12,13 @@ import {fromFlux, FromFluxResult, newTable} from '@influxdata/giraffe'
 import {Visualization} from '../Visualization'
 
 import {fetchClimateData} from './api'
-import {convertCSVToFluxAnnotatedCSV} from '../../data/convertCSVToFluxAnnotatedCSV'
+import {
+  mapCSVtoFluxForGraphs,
+  mapCSVtoFluxForTables,
+} from '../../data/mapCSVtoFlux'
 
 import {deleteCell} from './actions'
+import {VisualizationTypes} from '../../types'
 
 const initialFromFluxResult: FromFluxResult = {
   table: newTable(0),
@@ -40,7 +44,11 @@ const CellComponent: FC<CellProps & ReduxProps> = (props) => {
 
   useEffect(() => {
     fetchClimateData(props.dateRange).then((climateData) => {
-      const fluxResponse = convertCSVToFluxAnnotatedCSV(climateData)
+      const fluxResponse =
+        type === VisualizationTypes.SimpleTable
+          ? mapCSVtoFluxForTables(climateData)
+          : mapCSVtoFluxForGraphs(climateData)
+
       setFromFluxResult(fromFlux(fluxResponse))
     })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
