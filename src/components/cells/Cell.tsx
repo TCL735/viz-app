@@ -24,13 +24,11 @@ import {
 
 import {deleteCell} from './actions'
 import {VisualizationTypes} from '../../types'
-import {INITIAL_DATE_RANGE} from '../../constants.ts'
+import {INITIAL_DATE_RANGE} from '../../constants'
 
 const initialFromFluxResult: FromFluxResult = {
   table: newTable(0),
-
   fluxGroupKeyUnion: [],
-
   resultColumnNames: [],
 }
 

@@ -9,20 +9,20 @@
   flex-wrap: nowrap;
 }
 
-.cell-name {
-  flex: 1 0 0;
-  font-size: 20px;
-  font-weight: 600;
-  padding-right: 8px;
-  pointer-events: none;
-}
-
 .cell-header {
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
   flex: 0 0 8px;
   margin-bottom: 8px;
+}
+
+.cell-name {
+  flex: 1 0 0;
+  font-size: 20px;
+  font-weight: 600;
+  padding-right: 8px;
+  pointer-events: none;
 }
 
 .cell-label-adaptive-zoom {
@@ -51,7 +51,7 @@
 .loading-spinner {
   position: absolute;
   z-index: 9999;
-  top: 50%;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
   pointer-events: none;

@@ -144,7 +144,9 @@ export const useCustomDomain = (options: CustomDomainArgs) => {
 
     When zoomed in:
       - if it is the time axis and the the dates have changed,
-        reset the zoom back to default
+        reset the zoom back to default; this is needed because
+        a new date range will cause a fetch which means the
+        parent state wants to clear out the preZoomResult
   */
   useEffect(() => {
     if (

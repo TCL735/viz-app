@@ -32,6 +32,8 @@ export const DashboardComponent: FC<ReduxProps> = (props) => {
     y: cell.y,
     w: cell.w,
     h: cell.h,
+    minW: cell.minW,
+    minH: cell.minH,
   }))
 
   const handleLayoutChange = (grid: Layout[]) => {
