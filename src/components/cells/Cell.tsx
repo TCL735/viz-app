@@ -6,7 +6,9 @@ import {
   ComponentSize,
   ConfirmationButton,
   IconFont,
+  InputLabel,
   RemoteDataState,
+  SlideToggle,
   TechnoSpinner,
 } from '@influxdata/clockface'
 import {fromFlux, FromFluxResult, newTable} from '@influxdata/giraffe'
@@ -51,6 +53,7 @@ const CellComponent: FC<CellProps & ReduxProps> = (props) => {
   const [apiStatus, setApiStatus] = useState<RemoteDataState>(
     RemoteDataState.NotStarted
   )
+  const [adaptiveZoomOn, setAdaptiveZoomOn] = useState<boolean>(true)
 
   useEffect(() => {
     setApiStatus(RemoteDataState.Loading)
@@ -78,7 +81,12 @@ const CellComponent: FC<CellProps & ReduxProps> = (props) => {
   const cellBody =
     fromFluxResult.table.length > 0 ? (
       <div className="cell-body">
-        <Visualization type={type} fromFluxResult={fromFluxResult} />
+        <Visualization
+          adaptiveZoomOn={adaptiveZoomOn}
+          dateRange={selectedDateRange}
+          type={type}
+          fromFluxResult={fromFluxResult}
+        />
         {apiStatus === RemoteDataState.Loading ? (
           <TechnoSpinner
             className="loading-spinner"
@@ -99,6 +107,20 @@ const CellComponent: FC<CellProps & ReduxProps> = (props) => {
     <div className="cell">
       <div className="cell-header">
         <div className="cell-name">{name}</div>
+        {type !== VisualizationTypes.SimpleTable ? (
+          <>
+            <InputLabel className="cell-label-adaptive-zoom">
+              Adaptive Zoom
+            </InputLabel>
+            <SlideToggle
+              className="cell-toggle-adaptive-zoom"
+              active={adaptiveZoomOn}
+              size={ComponentSize.ExtraSmall}
+              onChange={() => setAdaptiveZoomOn(!adaptiveZoomOn)}
+              tooltipText={adaptiveZoomOn ? 'ON' : 'OFF'}
+            />
+          </>
+        ) : null}
         <DateRangeSelector
           className="cell-dropdown-date-range"
           selectedDateRange={selectedDateRange}

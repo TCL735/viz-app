@@ -1,4 +1,9 @@
-import React, {FC} from 'react'
+import React, {FC, useEffect, useState} from 'react'
+import {
+  ComponentSize,
+  RemoteDataState,
+  TechnoSpinner,
+} from '@influxdata/clockface'
 import {
   NINETEEN_EIGHTY_FOUR,
   Config,
@@ -10,21 +15,23 @@ import {
 } from '@influxdata/giraffe'
 
 import {VisualizationTypes} from '../types'
-import {extent} from '../utils/useVisDomain'
+import {useCustomDomain} from '../utils/useCustomDomain'
 
 interface VisualizationProps {
+  adaptiveZoomOn: boolean
+  dateRange: string
   fromFluxResult: FromFluxResult
   type: string
 }
 
 const timeZone = 'America/Los_Angeles'
-const timeFormat = 'YYYY-MM-DD HH:mm'
+const timeFormat = 'YYYY-MM-DD HH:mm:ss'
 const valueAxisLabel = ''
 const xScale = 'linear'
 const yScale = 'linear'
 const tickFont = '10px sans-serif'
-const xTotalTicks = 10
-const yTotalTicks = 10
+const xTotalTicks = 9
+const yTotalTicks = 11
 const legendFont = '12px sans-serif'
 const legendOpacity = 1.0
 const legendOrientationThreshold = 5
@@ -38,35 +45,46 @@ const hoverDimension = 'auto'
 const shadeBelow = false
 const shadeBelowOpacity = 0.1
 
-const includeXDomainZoom = true
-const onSetXDomain = (domain: number[]) => {
-  console.log('onSetXDomain: domain', domain)
-}
-
-const onResetXDomain = () => {
-  console.log('onResetXDomain')
-}
-
-const includeYDomainZoom = true
-const onSetYDomain = (domain: number[]) => {
-  console.log('onSetYDomain: domain', domain)
-}
-
-const onResetYDomain = () => {
-  console.log('onResetYDomain')
-}
-
 export const Visualization: FC<VisualizationProps> = (
   props: VisualizationProps
 ) => {
-  const {fromFluxResult, type} = props
-  const table = fromFluxResult.table
+  const {adaptiveZoomOn, dateRange, fromFluxResult, type} = props
 
-  // console.log('table:', table)
-  // console.log(
-  //   'extent of time column',
-  //   extent(table.getColumn('_time') as number[])
-  // )
+  const [resultState, setResultState] = useState(fromFluxResult)
+  const [preZoomResult, setPreZoomResult] = useState<FromFluxResult | null>(
+    null
+  )
+  const [requeryStatus, setRequeryStatus] = useState<RemoteDataState>(
+    RemoteDataState.NotStarted
+  )
+
+  useEffect(() => {
+    setResultState(fromFluxResult)
+  }, [fromFluxResult])
+
+  const table = resultState.table
+
+  const [xDomain, setXDomain, resetXDomain] = useCustomDomain({
+    adaptiveZoomOn,
+    data: table.getColumn('_time') as number[],
+    dateRange,
+    parsedResult: resultState,
+    preZoomResult,
+    setPreZoomResult,
+    setRequeryStatus,
+    setResult: setResultState,
+  })
+
+  const [yDomain, setYDomain, resetYDomain] = useCustomDomain({
+    adaptiveZoomOn,
+    data: table.getColumn('_value') as number[],
+    parsedResult: resultState,
+    preZoomResult,
+    setPreZoomResult,
+    setRequeryStatus,
+    setResult: setResultState,
+  })
+
   const graphConfig: Config = {
     table,
     valueFormatters: {
@@ -81,14 +99,12 @@ export const Visualization: FC<VisualizationProps> = (
     tickFont,
     xTotalTicks,
     yTotalTicks,
-    xDomain: extent(table.getColumn('_time') as number[]) as number[],
-    includeXDomainZoom,
-    onSetXDomain,
-    onResetXDomain,
-    yDomain: extent(table.getColumn('_value') as number[]) as number[],
-    includeYDomainZoom,
-    onSetYDomain,
-    onResetYDomain,
+    xDomain,
+    onSetXDomain: setXDomain,
+    onResetXDomain: resetXDomain,
+    yDomain,
+    onSetYDomain: setYDomain,
+    onResetYDomain: resetYDomain,
     legendFont,
     legendOpacity,
     legendOrientationThreshold,
@@ -126,5 +142,16 @@ export const Visualization: FC<VisualizationProps> = (
   const config =
     type === VisualizationTypes.SimpleTable ? tableConfig : graphConfig
 
-  return <Plot config={config}></Plot>
+  return (
+    <>
+      {adaptiveZoomOn && requeryStatus === RemoteDataState.Loading ? (
+        <TechnoSpinner
+          className="loading-spinner"
+          strokeWidth={ComponentSize.Large}
+        />
+      ) : (
+        <Plot config={config}></Plot>
+      )}
+    </>
+  )
 }

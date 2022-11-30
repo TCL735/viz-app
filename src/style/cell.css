@@ -25,9 +25,17 @@
   margin-bottom: 8px;
 }
 
+.cell-label-adaptive-zoom {
+  margin-right: 6px;
+}
+
+.cell-toggle-adaptive-zoom,
+.cell-dropdown-date-range {
+  margin-right: 12px;
+}
+
 .cell-dropdown-date-range {
   width: 175px !important;
-  margin-right: 12px;
 }
 
 .cell-dropdown-date-range > button {
