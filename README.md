@@ -123,7 +123,7 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm deploy`
+### `npm run deploy`
 
 Deploys the latest commit in `main` to Github Pages. Note: only the original author and collaborators should have access to this.
 
