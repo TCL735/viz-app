@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/viz-app/static/css/main.ae8b1b7f.css",
-    "main.js": "/viz-app/static/js/main.0b251da8.js",
+    "main.css": "/viz-app/static/css/main.ffd76046.css",
+    "main.js": "/viz-app/static/js/main.58b691e4.js",
     "static/js/787.0458c539.chunk.js": "/viz-app/static/js/787.0458c539.chunk.js",
     "static/media/ProximaNova-Bold.woff2": "/viz-app/static/media/ProximaNova-Bold.e91c6db5b35683295544.woff2",
     "static/media/ProximaNova-Regular.woff2": "/viz-app/static/media/ProximaNova-Regular.ce94a32357827905b305.woff2",
@@ -16,12 +16,12 @@
     "static/media/icomoon.ttf": "/viz-app/static/media/icomoon.97ab63262412c5c43a03.ttf",
     "static/media/icomoon.woff2": "/viz-app/static/media/icomoon.c3f97ef14e62b961b09f.woff2",
     "index.html": "/viz-app/index.html",
-    "main.ae8b1b7f.css.map": "/viz-app/static/css/main.ae8b1b7f.css.map",
-    "main.0b251da8.js.map": "/viz-app/static/js/main.0b251da8.js.map",
+    "main.ffd76046.css.map": "/viz-app/static/css/main.ffd76046.css.map",
+    "main.58b691e4.js.map": "/viz-app/static/js/main.58b691e4.js.map",
     "787.0458c539.chunk.js.map": "/viz-app/static/js/787.0458c539.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ae8b1b7f.css",
-    "static/js/main.0b251da8.js"
+    "static/css/main.ffd76046.css",
+    "static/js/main.58b691e4.js"
   ]
 }
