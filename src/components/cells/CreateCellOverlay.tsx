@@ -16,8 +16,12 @@ import {
 } from '@influxdata/clockface'
 import {DateRangeSelector} from '../DateRangeSelector'
 import {addCell, deleteCell} from './actions'
+import {
+  DEFAULT_CELL_LAYOUT_DIMENSIONS,
+  INITIAL_DATE_RANGE,
+  MAXIMUM_CELL_NAME_LENGTH,
+} from '../../constants'
 import {VisualizationTypes} from '../../types'
-import {INITIAL_DATE_RANGE} from '../../constants.ts'
 
 const OVERLAY_MAX_WIDTH = 600
 const initialVisualizationType = 'Select the visualization (* required)'
@@ -63,10 +67,12 @@ const CreateCellOverlayComponent: FC<CreateCellOverlayProps & ReduxProps> = (
       name: cellName,
       type: selectedVisualizationType,
       dateRange: selectedDateRange,
-      x: 0,
-      y: 0,
-      w: 12,
-      h: 10,
+      x: DEFAULT_CELL_LAYOUT_DIMENSIONS.x,
+      y: DEFAULT_CELL_LAYOUT_DIMENSIONS.y,
+      w: DEFAULT_CELL_LAYOUT_DIMENSIONS.w,
+      h: DEFAULT_CELL_LAYOUT_DIMENSIONS.h,
+      minW: DEFAULT_CELL_LAYOUT_DIMENSIONS.minW,
+      minH: DEFAULT_CELL_LAYOUT_DIMENSIONS.minH,
     })
     closeAddCellOverlay()
     setSelectedDateRange(INITIAL_DATE_RANGE)
@@ -88,6 +94,7 @@ const CreateCellOverlayComponent: FC<CreateCellOverlayProps & ReduxProps> = (
                 <Input
                   type={InputType.Text}
                   value={cellName}
+                  maxLength={MAXIMUM_CELL_NAME_LENGTH}
                   name="name"
                   onChange={handleNameInput}
                   placeholder="Name this cell"

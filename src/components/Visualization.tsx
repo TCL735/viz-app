@@ -5,17 +5,17 @@ import {
   TechnoSpinner,
 } from '@influxdata/clockface'
 import {
-  NINETEEN_EIGHTY_FOUR,
   Config,
   FromFluxResult,
   LayerConfig,
   Plot,
-  timeFormatter,
   SimpleTableLayerConfig,
+  timeFormatter,
 } from '@influxdata/giraffe'
 
-import {VisualizationTypes} from '../types'
 import {useCustomDomain} from '../utils/useCustomDomain'
+import {VisualizationTypes} from '../types'
+import {DEFAULT_GRAPH_OPTIONS} from '../constants'
 
 interface VisualizationProps {
   adaptiveZoomOn: boolean
@@ -24,30 +24,32 @@ interface VisualizationProps {
   type: string
 }
 
-const timeZone = 'America/Los_Angeles'
-const timeFormat = 'YYYY-MM-DD HH:mm:ss'
-const valueAxisLabel = ''
-const xScale = 'linear'
-const yScale = 'linear'
-const tickFont = '10px sans-serif'
-const xTotalTicks = 9
-const yTotalTicks = 11
-const legendFont = '12px sans-serif'
-const legendOpacity = 1.0
-const legendOrientationThreshold = 5
-const legendColorizeRows = true
-const showAxes = true
-const position = 'overlaid'
-const interpolation = 'monotoneX'
-const colors = NINETEEN_EIGHTY_FOUR
-const lineWidth = 1
-const hoverDimension = 'auto'
-const shadeBelow = false
-const shadeBelowOpacity = 0.1
-
 export const Visualization: FC<VisualizationProps> = (
   props: VisualizationProps
 ) => {
+  const {
+    timeZone,
+    timeFormat,
+    valueAxisLabel,
+    xScale,
+    yScale,
+    tickFont,
+    xTotalTicks,
+    yTotalTicks,
+    legendFont,
+    legendOpacity,
+    legendOrientationThreshold,
+    legendColorizeRows,
+    showAxes,
+    position,
+    interpolation,
+    colors,
+    lineWidth,
+    hoverDimension,
+    shadeBelow,
+    shadeBelowOpacity,
+  } = DEFAULT_GRAPH_OPTIONS
+
   const {adaptiveZoomOn, dateRange, fromFluxResult, type} = props
 
   const [resultState, setResultState] = useState(fromFluxResult)

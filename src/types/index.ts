@@ -7,6 +7,8 @@ export interface Cell {
   y: number
   w: number
   h: number
+  minW: number
+  minH: number
 }
 
 export enum VisualizationTypes {

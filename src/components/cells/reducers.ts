@@ -42,6 +42,8 @@ export const cellsReducer = (
           draftState.allIds[action.payload.id].y = action.payload.y
           draftState.allIds[action.payload.id].w = action.payload.w
           draftState.allIds[action.payload.id].h = action.payload.h
+          draftState.allIds[action.payload.id].minW = action.payload.minW
+          draftState.allIds[action.payload.id].minH = action.payload.minH
         }
         return
       }
