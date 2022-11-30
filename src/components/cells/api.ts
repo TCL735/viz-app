@@ -4,14 +4,12 @@ import {dailyClimate2015} from '../../data/dailyClimate2015'
 import {dailyClimate2016} from '../../data/dailyClimate2016'
 import {dailyClimate} from '../../data/dailyClimate'
 
+import {getRandomNumber} from '../../utils/random'
+import {createFluxForGraphsFromDomain} from '../../utils/mapCSVtoFlux'
 import {DateRangeOptions} from '../../types'
 
-const MIN_WAIT = 100
-const MAX_WAIT = 1200
-
-const getRandomWaitTime = (min: number, max: number) => {
-  return Math.random() * (max - min) + min
-}
+const MIN_WAIT = 200
+const MAX_WAIT = 1500
 
 export const fetchClimateData = async (dateRange: string) => {
   return new Promise<string>((resolve) => {
@@ -32,6 +30,14 @@ export const fetchClimateData = async (dateRange: string) => {
         default:
           return resolve(dailyClimate)
       }
-    }, getRandomWaitTime(MIN_WAIT, MAX_WAIT))
+    }, getRandomNumber(MIN_WAIT, MAX_WAIT))
+  })
+}
+
+export const requeryClimatData = async (domain: number[]) => {
+  return new Promise<string>((resolve) => {
+    setTimeout(() => {
+      resolve(createFluxForGraphsFromDomain(domain))
+    }, getRandomNumber(MIN_WAIT, MAX_WAIT))
   })
 }

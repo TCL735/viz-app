@@ -2,7 +2,11 @@ import {newTable} from '@influxdata/giraffe'
 import {LayerTypes} from '@influxdata/giraffe'
 import memoizeOne from 'memoize-one'
 
-const getRandomNumber = (
+export const getRandomNumber = (min: number, max: number): number => {
+  return Math.random() * (max - min) + min
+}
+
+const getRandomNumberWithNegativeForTable = (
   max: number,
   decimalPlaces: number,
   include_negative?: boolean
@@ -57,7 +61,9 @@ export const getRandomTable = memoizeOne(
     const now = Date.now()
 
     for (let i = 0; i < numberOfRecords; i += 1) {
-      valueColumn.push(getRandomNumber(maxValue, 2, includeNegative))
+      valueColumn.push(
+        getRandomNumberWithNegativeForTable(maxValue, 2, includeNegative)
+      )
       cpuColumn.push(`cpu${Math.floor(i / recordsPerLine)}`)
       timeColumn.push(now + (i % recordsPerLine) * 1000 * 60)
     }
@@ -147,11 +153,11 @@ export const createSampleTable = (options: SampleTableOptions) => {
   const HOST_COL = []
 
   for (let i = 0; i < numberOfRecords; i += 1) {
-    let num = getRandomNumber(maxValue, decimalPlaces)
+    let num = getRandomNumberWithNegativeForTable(maxValue, decimalPlaces)
     if (include_negative) {
       num = all_negative
         ? Math.abs(num) * -1
-        : getRandomNumber(maxValue, decimalPlaces, true)
+        : getRandomNumberWithNegativeForTable(maxValue, decimalPlaces, true)
     }
     VALUE_COL.push(num)
     CPU_COL.push(`${COLUMN_KEY}${Math.floor(i / recordsPerLine)}`)

@@ -1,6 +1,10 @@
+import {getRandomNumber} from './random'
+
 const startTime = '2013-01-01T00:00:00Z'
-const endTime = '2017-01-01T23:00:00Z'
+const endTime = '2017-01-01T07:59:59Z'
 const currentHour = 'T08:00:00Z'
+
+const DESIRED_POINTS_PER_GRAPH = 720
 
 interface AnnotatedTable {
   [key: string]: string
@@ -13,6 +17,31 @@ const resultLabelForDailyClimate: AnnotatedTable = {
   'mean pressure': 'centibars',
 }
 
+interface MeasurementRanges {
+  [key: string]: number[]
+}
+const measurementRange1: MeasurementRanges = {
+  'mean temp': [6, 25],
+  humidity: [55, 75],
+  'wind speed': [0, 15],
+  'mean pressure': [90, 100],
+}
+
+const measurementRange2: MeasurementRanges = {
+  'mean temp': [15, 30],
+  humidity: [65, 80],
+  'wind speed': [12, 24],
+  'mean pressure': [95, 100],
+}
+
+const measurementRange3: MeasurementRanges = {
+  'mean temp': [6, 40],
+  humidity: [60, 90],
+  'wind speed': [10, 36],
+  'mean pressure': [85, 105],
+}
+
+// this converts the static data files to Flux for graphs
 export const mapCSVtoFluxForGraphs = (csv: string): string => {
   const annotatedCSVHeader = `#group,false,false,true,true,false,false,true
 #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string`
@@ -50,6 +79,50 @@ export const mapCSVtoFluxForGraphs = (csv: string): string => {
   return Object.values(annotatedCSVTables).join('\n\n')
 }
 
+/*
+  This attempts to create more fine-grained data for adaptive zoom
+
+  TODO: make the random dataa trend more naturally rather than chaotically
+        as climate can have long periods of stable weather
+ */
+export const createFluxForGraphsFromDomain = (domain: number[]): string => {
+  const annotatedCSVHeader = `#group,false,false,true,true,false,false,true
+#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string`
+
+  const annotatedCSVTables: AnnotatedTable = {}
+  const begin = new Date(domain[0]).getTime()
+  const end = new Date(domain[1]).getTime()
+
+  const interval = (end - begin) / DESIRED_POINTS_PER_GRAPH
+
+  Object.keys(resultLabelForDailyClimate).forEach((measurement, index) => {
+    annotatedCSVTables[measurement] = `${annotatedCSVHeader}
+#default,${resultLabelForDailyClimate[measurement]},,,,,,
+,result,table,_start,_stop,_time,_value,_measurement
+`
+    for (let i = 0; i < DESIRED_POINTS_PER_GRAPH; i += 1) {
+      let date = new Date(begin + i * interval).toISOString()
+      let measurementRange = measurementRange1[measurement]
+      if (
+        i >= DESIRED_POINTS_PER_GRAPH / 3 &&
+        i < (2 * DESIRED_POINTS_PER_GRAPH) / 3
+      ) {
+        measurementRange = measurementRange3[measurement]
+      } else if (i >= (2 * DESIRED_POINTS_PER_GRAPH) / 3) {
+        measurementRange = measurementRange2[measurement]
+      }
+      let value = getRandomNumber(measurementRange[0], measurementRange[1])
+      annotatedCSVTables[
+        measurement
+      ] += `,,${index},${startTime},${endTime},${date},${value},${measurement}
+`
+    }
+  })
+
+  return Object.values(annotatedCSVTables).join('\n\n')
+}
+
+// this converts the static data files to Flux for tables
 export const mapCSVtoFluxForTables = (csv: string): string => {
   let fluxResponse = `#group,false,false,true,true,false,false,false,false,false,false
 #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,double,double,double,double
