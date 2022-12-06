@@ -174,6 +174,14 @@ export const useCustomDomain = (options: CustomDomainArgs) => {
     }
   }, [preZoomDomain, dateRange])
 
+  // If the use decides to toggle Adaptive Zoom, then reset the zoom to default
+  useEffect(() => {
+    if (preZoomResult) {
+      setResult(preZoomResult)
+      setDomain(preZoomDomain)
+    }
+  }, [adaptiveZoomOn]) // eslint-disable-line react-hooks/exhaustive-deps
+
   // If adaptive zoom is off, then return simpler handlers
   if (!adaptiveZoomOn) {
     const setDomain = (domain: number[]) => {
