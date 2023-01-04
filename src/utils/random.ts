@@ -3,3 +3,4 @@ export const getRandomNumber = (min: number, max: number): number => {
 }
 
 // just a comment
+// sign this comment
